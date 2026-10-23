@@ -6,7 +6,7 @@ Teaching platform project
 The website will be demonstrating multiple physics simulation that helps students understand and visualize concepts.
 
 FRONTEND Target:
-
+Done by FIGMA using an AI prompt, creating a vision for the outcome of the project
 
 <img width="803" height="761" alt="image" src="https://github.com/user-attachments/assets/4e87ff20-6676-4ac6-8170-c5ae14fba14d" />
 <img width="727" height="760" alt="image" src="https://github.com/user-attachments/assets/5c45c07d-d15e-4f79-8426-88f04db635b8" />
