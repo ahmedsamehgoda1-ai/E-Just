@@ -9,9 +9,7 @@ FRONTEND Target:
 Done by FIGMA using an AI prompt, creating a vision for the outcome of the project
 
 <img width="803" height="761" alt="image" src="https://github.com/user-attachments/assets/4e87ff20-6676-4ac6-8170-c5ae14fba14d" />
-<img width="727" height="760" alt="image" src="https://github.com/user-attachments/assets/5c45c07d-d15e-4f79-8426-88f04db635b8" />
-<img width="725" height="747" alt="image" src="https://github.com/user-attachments/assets/5cf57128-8807-4483-8d57-588204ba89e4" />
-<img width="730" height="757" alt="image" src="https://github.com/user-attachments/assets/4bda49e9-d487-46b8-b7f0-765cb7b758b5" />
+
 
 This is an initial Prototype for the visualization of the frontend.
 IT'S NOT WHAT THE FRONTEND WOULD LOOK LIKE BUT A ROUGHT ESTIMATION
