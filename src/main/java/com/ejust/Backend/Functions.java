@@ -19,7 +19,19 @@ public class Functions {
 
 
     // ==================== Ali ====================
+    public static double stress(double force, double area) {
+        if (area <= 0) {
+            throw new IllegalArgumentException("cross sectional area must be bigger than 0");
+        }
+        return force / area;
+    }
 
+    public static double strain(double changeInLength, double originalLength) {
+        if (originalLength <= 0) {
+            throw new IllegalArgumentException("original length must be bigger than 0");
+        }
+        return changeInLength / originalLength;
+    }
 
 
     // ==================== Ayaka ====================
