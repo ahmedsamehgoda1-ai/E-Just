@@ -36,6 +36,13 @@ public class Functions {
 
     // ==================== Ayaka ====================
 
+    public static double OhmsLaw(double Voltage, double Resistance) {
+        if (Resistance <= 0) {
+            throw new IllegalArgumentException("Resistance must be > 0");
+        }
+        return Voltage / Resistance;
+    }
+
 
 
 }
