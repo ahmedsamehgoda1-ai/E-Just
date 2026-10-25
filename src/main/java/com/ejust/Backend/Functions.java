@@ -16,7 +16,39 @@ public class Functions {
 
     // ==================== Omar ====================
 
+    private static final double GRAVITY = 9.81;
 
+    public static double projectileX(double initialVelocity, double angleDegrees, double time) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Time must be >= 0");
+        }
+        double rad = Math.toRadians(angleDegrees);
+        return initialVelocity * Math.cos(rad) * time;
+    }
+
+    public static double projectileY(double initialVelocity, double angleDegrees, double initialHeight, double time) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Time must be >= 0");
+        }
+        double rad = Math.toRadians(angleDegrees);
+        return initialHeight + (initialVelocity * Math.sin(rad) * time) - (0.5 * GRAVITY * time * time);
+    }
+
+    public static double projectileMaxHeight(double initialVelocity, double angleDegrees, double initialHeight) {
+        double rad = Math.toRadians(angleDegrees);
+        double v0y = initialVelocity * Math.sin(rad);
+        return initialHeight + (v0y * v0y) / (2 * GRAVITY);
+    }
+
+    public static double projectileTotalTime(double initialVelocity, double angleDegrees, double initialHeight) {
+        double rad = Math.toRadians(angleDegrees);
+        double v0y = initialVelocity * Math.sin(rad);
+        double discriminant = (v0y * v0y) + (2 * GRAVITY * initialHeight);
+        if (discriminant < 0) {
+            return 0.0;
+        }
+        return (v0y + Math.sqrt(discriminant)) / GRAVITY;
+    }
 
     // ==================== Ali ====================
     public static double stress(double force, double area) {
