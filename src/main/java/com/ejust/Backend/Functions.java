@@ -51,6 +51,7 @@ public class Functions {
     }
 
     // ==================== Ali ====================
+
     public static double stress(double force, double area) {
         if (area <= 0) {
             throw new IllegalArgumentException("cross sectional area must be bigger than 0");
