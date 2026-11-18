@@ -1,16 +1,19 @@
 ﻿import { useEffect, useState } from 'react'
 import { experimentHref, experiments } from './experiments'
+import Login from './Login'
 import './App.css'
 
 const filters = ['All experiments', 'Mechanics', 'Materials', 'Waves', 'Electricity']
 const library = '#/'
 const reference = '#/reference'
+const login = '#/login'
 const getRoute = () => window.location.hash || library
 
 function Sidebar({ route }) {
   const links = [
     [library, '⊞', 'Experiment library'],
     [reference, '◫', 'Equation reference'],
+    [login, '→', 'Log in'],
     ...experiments.slice(0, 3).map(({ id, title }, index) => [experimentHref(id), ['↔', '◷', '↕'][index], title]),
   ]
   return (
@@ -22,7 +25,7 @@ function Sidebar({ route }) {
       <nav aria-label="Main navigation">
         {links.map(([href, icon, label], index) => (
           <div key={href}>
-            {index === 2 && <p className="workbench">Your workbench</p>}
+            {index === 3 && <p className="workbench">Your workbench</p>}
             <a href={href} aria-current={route === href ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</a>
           </div>
         ))}
@@ -150,6 +153,7 @@ export default function App() {
   const experiment = experiments.find(({ id }) => experimentHref(id) === route)
   const title = route === library ? 'Experiment library'
     : route === reference ? 'Equation reference'
+    : route === login ? 'Log in'
     : experiment?.title ?? 'Page not found'
 
   useEffect(() => {
@@ -174,7 +178,9 @@ export default function App() {
           <p className="workspace-mode"><span aria-hidden="true">☼</span> Light workspace</p>
         </header>
         <main className="page">
-          {route === library ? <Library /> : <Destination route={route} experiment={experiment} title={title} />}
+          {route === library ? <Library />
+            : route === login ? <Login libraryHref={library} />
+            : <Destination route={route} experiment={experiment} title={title} />}
         </main>
         <footer><span>Physics lab / Learn by changing things.</span><span>Educational models · Results rounded to 3 significant figures</span></footer>
       </div>
