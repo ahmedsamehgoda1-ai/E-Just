@@ -1,12 +1,16 @@
 ﻿import { useEffect, useState } from 'react'
 import { experimentHref, experiments } from './experiments'
 import Login from './Login'
+import History from './History'
+import { sampleHistory } from './historyData'
 import './App.css'
 
 const filters = ['All experiments', 'Mechanics', 'Materials', 'Waves', 'Electricity']
 const library = '#/'
 const reference = '#/reference'
 const login = '#/login'
+const history = '#/history'
+const emptyHistory = '#/history?empty=1'
 const getRoute = () => window.location.hash || library
 
 function Sidebar({ route }) {
@@ -14,6 +18,7 @@ function Sidebar({ route }) {
     [library, '⊞', 'Experiment library'],
     [reference, '◫', 'Equation reference'],
     [login, '→', 'Log in'],
+    [history, '◷', 'History'],
     ...experiments.slice(0, 3).map(({ id, title }, index) => [experimentHref(id), ['↔', '◷', '↕'][index], title]),
   ]
   return (
@@ -25,7 +30,7 @@ function Sidebar({ route }) {
       <nav aria-label="Main navigation">
         {links.map(([href, icon, label], index) => (
           <div key={href}>
-            {index === 3 && <p className="workbench">Your workbench</p>}
+            {index === 4 && <p className="workbench">Your workbench</p>}
             <a href={href} aria-current={route === href ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</a>
           </div>
         ))}
@@ -150,10 +155,13 @@ function Destination({ route, experiment, title }) {
 
 export default function App() {
   const [route, setRoute] = useState(getRoute)
+  const isEmptyHistory = route === emptyHistory
+  const isHistory = route === history || isEmptyHistory
   const experiment = experiments.find(({ id }) => experimentHref(id) === route)
   const title = route === library ? 'Experiment library'
     : route === reference ? 'Equation reference'
     : route === login ? 'Log in'
+    : isHistory ? 'History'
     : experiment?.title ?? 'Page not found'
 
   useEffect(() => {
@@ -171,7 +179,7 @@ export default function App() {
 
   return (
     <div className="workspace">
-      <Sidebar route={route} />
+      <Sidebar route={isHistory ? history : route} />
       <div className="main-column">
         <header className="topbar">
           <nav aria-label="Breadcrumb"><a href={library}>Physics lab</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav>
@@ -180,6 +188,11 @@ export default function App() {
         <main className="page">
           {route === library ? <Library />
             : route === login ? <Login libraryHref={library} />
+            : isHistory ? <History libraryHref={library} entries={isEmptyHistory ? [] : sampleHistory}
+              previewLink={{
+                href: isEmptyHistory ? history : emptyHistory,
+                label: isEmptyHistory ? 'Show sample entries' : 'Preview empty history',
+              }} />
             : <Destination route={route} experiment={experiment} title={title} />}
         </main>
         <footer><span>Physics lab / Learn by changing things.</span><span>Educational models · Results rounded to 3 significant figures</span></footer>
