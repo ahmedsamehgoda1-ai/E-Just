@@ -10,6 +10,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
 
 /*
+
+
+
+ */
 /** Turns errors into the format from api.md: { status, error, message }. */
 @RestControllerAdvice
 public class ApiExceptionHandler {
