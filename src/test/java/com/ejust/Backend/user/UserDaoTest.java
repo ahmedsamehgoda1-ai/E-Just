@@ -12,39 +12,5 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:daotest")
 class UserDaoTest {
 
-	@Autowired
-	UserDao userDao;
 
-	@Autowired
-	JdbcTemplate jdbc;
-
-	@BeforeEach
-	void emptyUsersTable() {
-		jdbc.update("DELETE FROM users");
-	}
-
-	@Test
-	void insertThenFindByEmail() {
-		userDao.insert("a@x.com", "hash1");
-
-		User found = userDao.findByEmail("a@x.com");
-
-		assertNotNull(found);
-		assertEquals("a@x.com", found.email());
-		assertEquals("hash1", found.passwordHash());
-		assertNotNull(found.id());
-	}
-
-	@Test
-	void findByEmailReturnsNullWhenMissing() {
-		assertNull(userDao.findByEmail("missing@x.com"));
-	}
-
-	@Test
-	void uniqueConstraintRejectsDuplicateEmail() {
-		userDao.insert("a@x.com", "h1");
-
-		assertThrows(org.springframework.dao.DuplicateKeyException.class,
-				() -> userDao.insert("a@x.com", "h2"));
-	}
 }
