@@ -1,13 +1,35 @@
 package com.ejust.Backend.user;
 
-import com.ejust.Backend.dao.Dao;
+import com.ejust.Backend.dao.BaseDao;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
-/** What the app can do with users. Gets findAll() by extending Dao. */
-public interface UserDao extends Dao<User> {
+/** Reads and writes the users table. Gets jdbc from BaseDao. */
+@Repository
+public class UserDao extends BaseDao {
 
-	void insert(String email, String passwordHash);
+	public UserDao(JdbcTemplate jdbc) {
+		super(jdbc);
+	}
 
-	Optional<User> findByEmail(String email);
+	public void insert(String email, String passwordHash) {
+		jdbc.update("INSERT INTO users (email, password_hash) VALUES (?, ?)", email, passwordHash);
+	}
+
+	/** Returns the user with this email, or null if there is none. */
+	public User findByEmail(String email) {
+		List<User> users = jdbc.query("SELECT * FROM users WHERE email = ?", this::mapRow, email);
+		if (users.isEmpty()) {
+			return null;
+		}
+		return users.get(0);
+	}
+
+	private User mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return new User(rs.getLong("id"), rs.getString("email"), rs.getString("password_hash"));
+	}
 }

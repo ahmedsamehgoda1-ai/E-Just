@@ -21,6 +21,12 @@ public class AuthController {
 	public record LoginRequest(@NotBlank String email, @NotBlank String password) {
 	}
 
+	public record RegisterResponse(Long id, String email) {
+	}
+
+	public record LoginResponse(String email) {
+	}
+
 	private final UserDao userDao;
 	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -30,22 +36,23 @@ public class AuthController {
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Object register(@Valid @RequestBody RegisterRequest req) {
+	public RegisterResponse register(@Valid @RequestBody RegisterRequest req) {
 		String email = req.email().trim().toLowerCase();
-		if (userDao.findByEmail(email).isPresent()) {
+		if (userDao.findByEmail(email) != null) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
 		}
 		userDao.insert(email, encoder.encode(req.password()));
-		User user = userDao.findByEmail(email).orElseThrow();
-		return java.util.Map.of("id", user.id(), "email", user.email());
+		User user = userDao.findByEmail(email);
+		return new RegisterResponse(user.id(), user.email());
 	}
 
 	@PostMapping("/login")
-	public Object login(@Valid @RequestBody LoginRequest req) {
+	public LoginResponse login(@Valid @RequestBody LoginRequest req) {
 		String email = req.email().trim().toLowerCase();
-		User user = userDao.findByEmail(email)
-				.filter(u -> encoder.matches(req.password(), u.passwordHash()))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password"));
-		return java.util.Map.of("email", user.email());
+		User user = userDao.findByEmail(email);
+		if (user == null || !encoder.matches(req.password(), user.passwordHash())) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password");
+		}
+		return new LoginResponse(user.email());
 	}
 }
