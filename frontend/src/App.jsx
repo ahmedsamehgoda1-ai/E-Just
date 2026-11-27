@@ -4,6 +4,12 @@ import Login from './Login'
 import History from './History'
 import { sampleHistory } from './historyData'
 import './App.css'
+import HooksLaw from './HooksLaw'
+import StressStrain from './StressStrain'
+import SimplePendulum from './SimplePendulum'
+import ProjectileMotion from './ProjectileMotion'
+import WavesSuperposition from './WavesSuperposition'
+import OhmsLaw from './OhmsLaw'
 
 const filters = ['All experiments', 'Mechanics', 'Materials', 'Waves', 'Electricity']
 const library = '#/'
@@ -127,6 +133,16 @@ function Library() {
   )
 }
 
+function SimulationFor({ experiment }) {
+  if (experiment.id === 'hookes-law') return <HooksLaw />
+  if (experiment.id === 'stress-strain') return <StressStrain />
+  if (experiment.id === 'simple-pendulum') return <SimplePendulum />
+  if (experiment.id === 'projectile-motion') return <ProjectileMotion />
+  if (experiment.id === 'waves-superposition') return <WavesSuperposition />
+  if (experiment.id === 'ohms-law') return <OhmsLaw />
+  return <p className="detail-status">Interactive simulation coming soon.</p>
+}
+
 function Destination({ route, experiment, title }) {
   return (
     <section className="destination">
@@ -138,8 +154,7 @@ function Destination({ route, experiment, title }) {
           <div className="card-body">
             <p className="formula">{experiment.formula}</p>
             <p>{experiment.description}</p>
-            <p className="detail-status">Interactive simulation coming soon.</p>
-          </div>
+            <SimulationFor experiment={experiment} />         </div>
         </article>
       )}
       {route === reference && (
